@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "default",
+      "default": true
+    }
+  ],
+  "name": "s3lightning",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "58.0"
+}

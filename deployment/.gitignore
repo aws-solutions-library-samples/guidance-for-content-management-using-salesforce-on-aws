@@ -1,0 +1,8 @@
+**/node_modules
+cdk.out
+**/__pycache__
+.sfdx
+.venv
+.idea
+/*/SampleMediaFiles/
+/media-management-solution-cdk/SampleMediaFiles/

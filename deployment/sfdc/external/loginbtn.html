@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>Login</title>
+        <script>
+            function doSignIn() {
+                window.location.href = "https://speed-page-5658-dev-ed.scratch.my.salesforce.com/services/oauth2/authorize?client_id=3MVG9BJjUUIJZf1xjWuKy9sw2pv7B2SJT342ltrK3pf9KO465Uda11GH0jIZIkubks50gsv9Ba.2Y1wvPBhK.&redirect_uri=https://d29w4l064pk0g3.cloudfront.net/login.html&response_type=token+id_token" + 
+                    "&nonce=" + Date.now();
+            }
+        </script>
+    </head>
+    <body>
+        <button onclick="doSignIn();">
+            Login
+        </button>
+    </body>
+</html>

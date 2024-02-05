@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>test</title>
+        <script>
+            function listen() {
+                window.addEventListener(
+                    "message",
+                    event => {
+                        document.querySelector("#msgSpan").innerText = JSON.stringify(data)
+                    }
+                );
+            }
+        </script>
+    </head>
+    <body onload="listen();">
+        <iframe src="http://127.0.0.1:8080/login.html" width="400" height="400" />
+        <span id="msgSpan">aa</span>
+    </body>
+</html>

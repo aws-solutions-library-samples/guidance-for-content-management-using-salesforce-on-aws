@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>AWS S3 Media Files</masterLabel>
+    <description>A Lightning Web Component that lists, deletes, and uploads files to an Amazon Web Services S3 bucket.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightningCommunity__Page</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage,lightningCommunity__Default">
+            <property name="cardTitle" label="Card Title" type="String" default="AWS Files" description="The title to be used at the top of the card." />
+            <property name="hideIcon" label="Hide the AWS logo icon" type="Boolean" default="false" description="Hide the AWS logo on the Lightning card." />
+            <property name="hideViewAndTranscription" label="Hide media file view and transcription conrols" type="Boolean" default="false" description="Hide controls in the file lister that allow the user to view media files and their transcriptions." />
+            <property name="prefix" label="Demo Prefix" type="String" default="Change_this_prefix" description="A string that will uniquely identify your demo environment in the shared S3 bucket, such as 'Veterans Administration Demo on Tuesday'." required="true" />
+            <property name="awsInputBucketName" label="AWS Input Bucket Name" type="String" default="MyInputBucket" description="The AWS Input bucket name." required="true" />
+            <property name="awsOutputBucketName" label="AWS Output Bucket Name" type="String" default="MyOutputBucket" description="The AWS Output bucket name." required="true" />
+            <property name="awsTranscriptionBucketName" label="AWS Transcription Bucket Name" type="String" default="MyTranscriptionBucket" description="The AWS Transcription bucket name." required="true" />
+            <property name="awsKendraIndex" label="AWS Kendra Index ID" type="String" default="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXX" description="The AWS Kendra Index" required="true" />
+            <property name="awsAPIEndpoint" label="AWS API Endpoint" type="String" default="https://apiaddress.amazonaws.com" description="The AWS API Endpoint" required="true" />
+            <property name="awsRegion" label="AWS Region" type="String" default="us-east-1" description="The AWS region in which the S3 bucket is located." required="true" />
+       </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

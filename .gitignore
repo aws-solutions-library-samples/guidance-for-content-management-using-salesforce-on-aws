@@ -1,1 +1,5 @@
 .idea/
+/deployment/media-management-solution-cdk/media-management-solution-cdk/SampleMediaFiles/
+/.venv/
+/deployment/media-management-solution-cdk/.venv/
+/deployment/media-management-solution-cdk/cdk.out/
