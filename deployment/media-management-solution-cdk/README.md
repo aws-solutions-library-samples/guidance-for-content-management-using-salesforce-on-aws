@@ -1,5 +1,5 @@
 
-# Welcome to your CDK Python project!
+# Deploy sfdc-media-solution CDK Stack
 
 You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`media_management_solutions_library_stack`)
 which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
@@ -14,45 +14,57 @@ manually once the init process completes.
 
 To manually create a virtualenv on MacOS and Linux:
 
-```
-$ python3 -m venv .venv
+```bash
+python3 -m venv .venv
 ```
 
 After the init process completes and the virtualenv is created, you can use the following
 step to activate your virtualenv.
 
-```
-$ source .venv/bin/activate
+```bash
+source .venv/bin/activate
 ```
 
 If you are a Windows platform, you would activate the virtualenv like this:
 
-```
-% .venv\Scripts\activate.bat
+```bash
+.venv\Scripts\activate.bat
 ```
 
 Once the virtualenv is activated, you can install the required dependencies.
 
-```
-$ pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 
 At this point you can now synthesize the CloudFormation template for this code.
 
-```
-$ cdk synth
-```
-
-You can now begin exploring the source code, contained in the hello directory.
-There is also a very trivial test included that can be run like this:
-
-```
-$ pytest
+```bash
+cdk synth
 ```
 
-To add additional dependencies, for example other CDK libraries, just add to
-your requirements.txt file and rerun the `pip install -r requirements.txt`
-command.
+# change the default parameters 
+The CDK Stack will have default values set in the [app.py](app.py) file. Here are the parameters that you can change: 
+- `enable_s3_kms_encryption` Is a boolean value. When True, it will use the KMS master key to encrypt S3. If False, Se will be encrypted with SSE-S3 default encryption.
+- `deploy_kendra` Is a boolean value. When True, a Kendra will be deployed.
+- `kendra_index_edition` Accepted values are: DEVELOPER_EDITION or ENTERPRISE_EDITION
+- `deploy_video_rekognition` Is a boolean value. When True, an optional Video Rekognition stack will be deployed. Currently, the Salesforce LWC will not be able to render the results of Video Rekognition on the Salesforce Console. 
+- `pub_cert` this is the string value of the self signed cert generated in Salesforce. If you overwrite [cert.crt](media-management-solution-cdk/cert.crt) with the self signed cert created in Salesforce, there is nothing to change here.
+
+Deploy this CloudFormation template. 
+
+```bash
+cdk deploy
+```
+
+The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab: 
+![cdk-output](assets/cloudformation-output.png)
+
+
+It is also avaiable in the CDK CLI after a sucessful deployment: 
+![cdk-output](assets/cdk-output.png)
+
+
 
 ## Useful commands
 
