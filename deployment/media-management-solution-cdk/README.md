@@ -14,32 +14,32 @@ manually once the init process completes.
 
 To manually create a virtualenv on MacOS and Linux:
 
-```bash
+```Shell
 python3 -m venv .venv
 ```
 
 After the init process completes and the virtualenv is created, you can use the following
 step to activate your virtualenv.
 
-```bash
+```Shell
 source .venv/bin/activate
 ```
 
 If you are a Windows platform, you would activate the virtualenv like this:
 
-```bash
+```Shell
 .venv\Scripts\activate.bat
 ```
 
 Once the virtualenv is activated, you can install the required dependencies.
 
-```bash
+```Shell
 pip install -r requirements.txt
 ```
 
 At this point you can now synthesize the CloudFormation template for this code.
 
-```bash
+```Shell
 cdk synth
 ```
 
@@ -53,16 +53,18 @@ The CDK Stack will have default values set in the [app.py](app.py) file. Here ar
 
 Deploy this CloudFormation template. 
 
-```bash
+```Shell
 cdk deploy
 ```
 
-The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab: 
-![cdk-output](assets/cloudformation-output.png)
+The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab:
 
+<img src="assets/cloudformation-output.png" alt="cf-output" width="800" height="auto">
 
-It is also avaiable in the CDK CLI after a sucessful deployment: 
-![cdk-output](assets/cdk-output.png)
+It is also avaiable in the CDK CLI after a sucessful deployment:
+
+<img src="assets/cdk-output.png" alt="cdk-output" width="800" height="auto">
+
 
 
 
