@@ -1,10 +1,4 @@
-# Guidance Title (required)
-
-The Guidance title should be consistent with the title established first in Alchemy.
-
-**Example:** *Guidance for Product Substitutions on AWS*
-
-This title correlates exactly to the Guidance it’s linked to, including its corresponding sample code repository. 
+# Guidance for Content Management using Salesforce on AWS
 
 
 ## Table of Content (required)
@@ -54,20 +48,12 @@ Replace this amount with the approximate cost for running your Guidance in the d
 ## Prerequisites (required)
 
 ### Operating System (required)
-
-- Talk about the base Operating System (OS) and environment that can be used to run or deploy this Guidance, such as *Mac, Linux, or Windows*. Include all installable packages or modules required for the deployment. 
-- By default, assume Amazon Linux 2/Amazon Linux 2023 AMI as the base environment. All packages that are not available by default in AMI must be listed out.  Include the specific version number of the package or module.
-
-**Example:**
-“These deployment instructions are optimized to best work on **<Amazon Linux 2 AMI>**.  Deployment in another OS may require additional steps.”
-
-- Include install commands for packages, if applicable.
-
-
-### Third-party tools (If applicable)
-
-*List any installable third-party tools required for deployment.*
-
+These deployment instructions are optimized to best work on a Mac or Linux environment.  Deployment in Windows may require additional steps for setting up required libraries and CLI.
+Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment will have all the requirements installed.
+- Install Python 3.7 or later including pip and virtualenv
+- Install Node.js 14.15.0 or later
+- Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- Install [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 
 ### AWS account requirements (If applicable)
 
@@ -90,10 +76,6 @@ Replace this amount with the approximate cost for running your Guidance in the d
 
 **Example blurb:** “This Guidance uses aws-cdk. If you are using aws-cdk for first time, please perform the below bootstrapping....”
 
-### Service limits  (if applicable)
-
-<Talk about any critical service limits that affect the regular functioning of the Guidance. If the Guidance requires service limit increase, include the service name, limit name and link to the service quotas page.>
-
 ### Supported Regions (if applicable)
 
 <If the Guidance is built for specific AWS Regions, or if the services used in the Guidance do not support all Regions, please specify the Region this Guidance is best suited for>
@@ -101,25 +83,9 @@ Replace this amount with the approximate cost for running your Guidance in the d
 
 ## Deployment Steps (required)
 
-Deployment steps must be numbered, comprehensive, and usable to customers at any level of AWS expertise. The steps must include the precise commands to run, and describe the action it performs.
-
-* All steps must be numbered.
-* If the step requires manual actions from the AWS console, include a screenshot if possible.
-* The steps must start with the following command to clone the repo. ```git clone xxxxxxx```
-* If applicable, provide instructions to create the Python virtual environment, and installing the packages using ```requirement.txt```.
-* If applicable, provide instructions to capture the deployed resource ARN or ID using the CLI command (recommended), or console action.
-
- 
-**Example:**
-
-1. Clone the repo using command ```git clone xxxxxxxxxx```
-2. cd to the repo folder ```cd <repo-name>```
-3. Install packages in requirements using command ```pip install requirement.txt```
-4. Edit content of **file-name** and replace **s3-bucket** with the bucket name in your account.
-5. Run this command to deploy the stack ```cdk deploy``` 
-6. Capture the domain name created by running this CLI command ```aws apigateway ............```
-
-
+1. Clone the repo using command ```git clone https://github.com/aws-solutions-library-samples/guidance-for-content-management-using-salesforce-on-aws.git```
+2. cd to the repo folder ```cd guidance-for-content-management-using-salesforce-on-aws```
+3. Follow the [Deployment Instructions](deployment) to deploy the AWS resources using CDK and the Salesforce Lightning Web Component using the Salesforce CLI.
 
 ## Deployment Validation  (required)
 
@@ -156,7 +122,10 @@ Provide suggestions and recommendations about how customers can modify the param
 
 - Include detailed instructions, commands, and console actions to delete the deployed Guidance.
 - If the Guidance requires manual deletion of resources, such as the content of an S3 bucket, please specify.
-
+- ECR will be retained
+- S3 will be retained
+- EC2 image builder Container recipes will be retained
+- EC2 image builder Infrastructure configurations
 
 
 ## FAQ, known issues, additional considerations, and limitations (optional)
