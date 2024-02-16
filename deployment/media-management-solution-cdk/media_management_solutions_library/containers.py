@@ -19,8 +19,8 @@ class ContainerRecipeStack(Construct):
         self.instance_profile_role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("EC2InstanceProfileForImageBuilderECRContainerBuilds"))
         self.instance_profile = iam.InstanceProfile(self, id="MyInstanceProfile", role=self.instance_profile_role)
-        self.image_config = imagebuilder.CfnInfrastructureConfiguration(self, id="InfrastructureConfiguration",
-                                                                        name="InfrastructureConfiguration",
+        self.image_config = imagebuilder.CfnInfrastructureConfiguration(self, id=f"InfrastructureConfiguration{construct_id}",
+                                                                        name=f"InfrastructureConfiguration{construct_id}",
                                                                         instance_profile_name=self.instance_profile.instance_profile_name)
 
     def create_container_recipe (self, name, parent_image, component_arn, target_repository,

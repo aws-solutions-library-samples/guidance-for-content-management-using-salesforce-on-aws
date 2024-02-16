@@ -48,21 +48,6 @@ Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment wil
 - Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Install [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 
-### AWS account requirements (If applicable)
-
-*List out pre-requisites required on the AWS account if applicable, this includes enabling AWS regions, requiring ACM certificate.*
-
-**Example:** “This deployment requires you have public ACM certificate available in your AWS account”
-
-**Example resources:**
-- ACM certificate 
-- DNS record
-- S3 bucket
-- VPC
-- IAM role with specific permissions
-- Enabling a Region or service etc.
-
-
 ### Supported Regions
 
 This Guidance is built for regions that support Amazon Kendra. Supported regions are subject to change, so please review [Amazon Kendra endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/kendra.html) for the most up-to-date list.
@@ -98,10 +83,24 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
    * Here is a [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_start_unified)
 5. Add the `AWS S3 Media Files` component to pages as desired.
 6. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
+<img src="deployment/media-management-solution-cdk/assets/cdk-output.png" alt="cdk-output" width="600" height="auto">
 
-<img src="deployment/media-management-solution-cdk/assets/lightning-app-builder.png" alt="lwc" width="600" height="auto">
 
-## Deployment Validation  (required)
+
+## Deployment Validation
+
+To validate the deployment, you will need to upload some media files to a case. In this example, you can see that a JPG image and MOV video file were successfully uploaded.
+
+<img src="deployment/media-management-solution-cdk/assets/case_dashboard.png" alt="case_dashboard" width="700" height="auto">
+The processing in AWS runs asynchronously, so the results may take a few seconds to load. When looking at the outputs of an Image File, you will see the image metadata, image location, and results of Amazon Rekognition.
+
+<img src="deployment/media-management-solution-cdk/assets/image_output.png" alt="image_output" width="700" height="auto">
+
+When looking at the outputs of a Video File, you will see the video preview, and the transcription with timestamps. There is also an option to download the transcription.
+
+<img src="deployment/media-management-solution-cdk/assets/video_output.png" alt="video_output" width="700" height="auto">
+Here is a sample output of the Document generated.
+<img src="deployment/media-management-solution-cdk/assets/transcription_docx.png" alt="transcription_docx" width="600" height="auto">
 
 <Provide steps to validate a successful deployment, such as terminal output, verifying that the resource is created, status of the CloudFormation template, etc.>
 
