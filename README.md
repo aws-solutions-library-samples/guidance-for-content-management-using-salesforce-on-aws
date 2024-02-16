@@ -1,5 +1,7 @@
 # Guidance for Content Management using Salesforce on AWS
 
+<img src="assets/images/reference_architecture.png" alt="reference_architecture" width="800" height="auto">
+
 
 ## Table of Content (required)
 
@@ -12,6 +14,8 @@ List the top-level sections of the README template, along with a hyperlink to th
 2. [Prerequisites](#prerequisites)
     - [Operating System](#operating-system)
 3. [Deployment Steps](#deployment-steps)
+    - [Deploy AWS](#deploy-aws)
+   - [Deploy Salesforce Lightning Web Component](#deploy-salesforce-lightning-web-component)
 4. [Deployment Validation](#deployment-validation)
 5. [Running the Guidance](#running-the-guidance)
 6. [Next Steps](#next-steps)
@@ -26,13 +30,17 @@ List the top-level sections of the README template, along with a hyperlink to th
 
 ## Overview
 
+
+In this guidance, c
+
+
 1. Provide a brief overview explaining the what, why, or how of your Guidance. You can answer any one of the following to help you write this:
 
     - **Why did you build this Guidance?**
     - **What problem does this Guidance solve?**
 
-2. Include the architecture diagram image, as well as the steps explaining the high-level overview and flow of the architecture. 
-    - To add a screenshot, create an ‘assets/images’ folder in your repository and upload your screenshot to it. Then, using the relative file path, add it to your README. 
+2. Include the architecture diagram image, as well as the steps explaining the high-level overview and flow of the architecture.
+    - To add a screenshot, create an ‘assets/images’ folder in your repository and upload your screenshot to it. Then, using the relative file path, add it to your README.
 
 ### Cost
 
@@ -69,9 +77,9 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
 2. Follow the instruction on [Media Management CDK](deployment/media-management-solution-cdk/README.md) to configure and deploy the CDK stack in your AWS Account.
 3. The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab, or in the CDK CLI after a successful deployment:
 
-<img src="deployment/media-management-solution-cdk/assets/cloudformation-output.png" alt="cf-output" width="700" height="auto">
+<img src="assets/images/cloudformation-output.png" alt="cf-output" width="700" height="auto">
 
-<img src="deployment/media-management-solution-cdk/assets/cdk-output.png" alt="cdk-output" width="700" height="auto">
+<img src="assets/images/cdk-output.png" alt="cdk-output" width="700" height="auto">
 
 ### Deploy Salesforce Lightning Web Component
 1. Have the Saleforce CLI installed. Here are instruction to install: [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
@@ -83,7 +91,7 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
    * Here is a [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_start_unified)
 5. Add the `AWS S3 Media Files` component to pages as desired.
 6. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
-<img src="deployment/media-management-solution-cdk/assets/cdk-output.png" alt="cdk-output" width="600" height="auto">
+<img src="assets/images/lightning-app-builder.png" alt="lightning-app-builder" width="600" height="auto">
 
 
 
@@ -91,27 +99,19 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
 
 To validate the deployment, you will need to upload some media files to a case. In this example, you can see that a JPG image and MOV video file were successfully uploaded.
 
-<img src="deployment/media-management-solution-cdk/assets/case_dashboard.png" alt="case_dashboard" width="700" height="auto">
+<img src="assets/images/case_dashboard.png" alt="case_dashboard" width="700" height="auto">
+
 The processing in AWS runs asynchronously, so the results may take a few seconds to load. When looking at the outputs of an Image File, you will see the image metadata, image location, and results of Amazon Rekognition.
 
-<img src="deployment/media-management-solution-cdk/assets/image_output.png" alt="image_output" width="700" height="auto">
+<img src="assets/images/image_output.png" alt="image_output" width="700" height="auto">
 
 When looking at the outputs of a Video File, you will see the video preview, and the transcription with timestamps. There is also an option to download the transcription.
 
-<img src="deployment/media-management-solution-cdk/assets/video_output.png" alt="video_output" width="700" height="auto">
+<img src="assets/images/video_output.png" alt="video_output" width="700" height="auto">
+
 Here is a sample output of the Document generated.
-<img src="deployment/media-management-solution-cdk/assets/transcription_docx.png" alt="transcription_docx" width="600" height="auto">
 
-<Provide steps to validate a successful deployment, such as terminal output, verifying that the resource is created, status of the CloudFormation template, etc.>
-
-
-**Examples:**
-
-* Open CloudFormation console and verify the status of the template with the name starting with xxxxxx.
-* If deployment is successful, you should see an active database instance with the name starting with <xxxxx> in        the RDS console.
-*  Run the following CLI command to validate the deployment: ```aws cloudformation describe xxxxxxxxxxxxx```
-
-
+<img src="assets/images/transcription_docx.png" alt="transcription_docx" width="600" height="auto">
 
 ## Running the Guidance
 
@@ -182,14 +182,19 @@ Document all notable changes to this project.
 
 Consider formatting this section based on Keep a Changelog, and adhering to Semantic Versioning.
 
-## Notices (optional)
+## Notices
 
-Include a legal disclaimer
+**External Library Notice:**
+*An external FFmpeg binary will be pulled from [https://www.johnvansickle.com](https://www.johnvansickle.com) for the [Encoder Dockerfile](deployment/media-management-solution-cdk/media_management_solutions_library/container_assets/EncoderRecipe/Dockerfile) container. It is the responsibility of the customer to abide by the licensing of FFmpeg.*
 
-**Example:**
+**Legal Disclaimer:**
 *Customers are responsible for making their own independent assessment of the information in this Guidance. This Guidance: (a) is for informational purposes only, (b) represents AWS current product offerings and practices, which are subject to change without notice, and (c) does not create any commitments or assurances from AWS and its affiliates, suppliers or licensors. AWS products or services are provided “as is” without warranties, representations, or conditions of any kind, whether express or implied. AWS responsibilities and liabilities to its customers are controlled by AWS agreements, and this Guidance is not part of, nor does it modify, any agreement between AWS and its customers.*
 
 
-## Authors (optional)
+## Authors
 
-Name of code contributors
+John Meyer - Salesforce Solutions Engineer (Retired)
+Kyle Hart - AWS Principal Solutions Architect
+Christian Ramirez - AWS Partner Solutions Architect
+Kishore Dhamodaran - AWS Senior Solutions Architect
+Jared Wiener - AWS Senior Solutions Architect

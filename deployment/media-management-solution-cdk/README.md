@@ -55,7 +55,7 @@ The CDK Stack will have default values set in the [app.py](app.py) file. Here ar
 - `deploy_kendra` Is a boolean value. When `True`, Amazon Kendra will be deployed along with connections to Transcription and Output Bucket datasource.
 - `kendra_index_edition` Accepted values are: `DEVELOPER_EDITION` (default) or `ENTERPRISE_EDITION`
 - `deploy_video_rekognition` Is a boolean value. When `True`, an optional Video Rekognition stack will be deployed. Currently, the Salesforce LWC will not be able to render the results of Video Rekognition on the Salesforce Console.
-- `pub_cert` this is the string value of the self-signed cert generated in Salesforce. If you overwrite [cert.crt](media-management-solution-cdk/cert.crt) with the self-signed cert created in Salesforce, there is nothing to change here.
+- `pub_cert` this is the string value of the self-signed cert generated in Salesforce. If you overwrite [cert.crt](cert.crt) with the self-signed cert created in Salesforce, there is nothing to change here.
 
 ### Deployment Notes
 - Changing the `deploy_kendra` to `False` will help reduce cost for evaluating the solution for your use case. The "Search for case files" functionality in the Salesforce Lightning Web Component (LWC) will not work and not provide any results, but the search bar will still be present.
@@ -76,11 +76,11 @@ cdk deploy
 
 The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab:
 
-<img src="assets/cloudformation-output.png" alt="cf-output" width="800" height="auto">
+<img src="../../assets/images/cloudformation-output.png" alt="cf-output" width="800" height="auto">
 
 It is also avaiable in the CDK CLI after a sucessful deployment:
 
-<img src="assets/cdk-output.png" alt="cdk-output" width="800" height="auto">
+<img src="../../assets/images/cdk-output.png" alt="cdk-output" width="800" height="auto">
 
 
 ## Useful commands
