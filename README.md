@@ -20,13 +20,9 @@ List the top-level sections of the README template, along with a hyperlink to th
 5. [Running the Guidance](#running-the-guidance)
 6. [Next Steps](#next-steps)
 7. [Cleanup](#cleanup)
-
-***Optional***
-
-8. [FAQ, known issues, additional considerations, and limitations](#faq-known-issues-additional-considerations-and-limitations-optional)
-9. [Revisions](#revisions-optional)
-10. [Notices](#notices-optional)
-11. [Authors](#authors-optional)
+8. [Supported Media Files](#supported-media-files)
+10. [Notices](#notices)
+11. [Authors](#authors)
 
 ## Overview
 
@@ -152,35 +148,15 @@ After deleting the stack, there will be some resources that will be retained. Yo
   - Infrastructure configurations:
     - `InfrastructureConfigurationContainerStack`
 
-## FAQ, known issues, additional considerations, and limitations (optional)
+## Supported Media Files
 
-
-**Known issues (optional)**
-
-<If there are common known issues, or errors that can occur during the Guidance deployment, describe the issue and resolution steps here>
-
-
-**Additional considerations (if applicable)**
-
-<Include considerations the customer must know while using the Guidance, such as anti-patterns, or billing considerations.>
-
-**Examples:**
-
-- “This Guidance creates a public AWS bucket required for the use-case.”
-- “This Guidance created an Amazon SageMaker notebook that is billed per hour irrespective of usage.”
-- “This Guidance creates unauthenticated public API endpoints.”
-
-
-Provide a link to the *GitHub issues page* for users to provide feedback.
-
-
-**Example:** *“For any feedback, questions, or suggestions, please use the issues tab under this repo.”*
-
-## Revisions (optional)
-
-Document all notable changes to this project.
-
-Consider formatting this section based on Keep a Changelog, and adhering to Semantic Versioning.
+Because of the format compatibility of Amazon Transcribe and Amazon Rekognition, only the following file formats are supported. Any formats not present here, will still be stored in S3, but will not be processed by its respective pipeline.
+- Image File Formats: "jpg", "jpeg", "png"
+  - Here are the [Image specifications](https://docs.aws.amazon.com/rekognition/latest/dg/images-information.html) for Amazon Rekognition
+- Video File Formats: 'mpeg4', 'mp4', 'mov', 'avi'
+  - Here are the [Video specifications](https://docs.aws.amazon.com/rekognition/latest/dg/video.html) for Amazon Rekognition
+- Audio File Formats: 'amr', 'flac', 'm4a', 'mp3', 'mp4', 'ogg', 'webm', 'wav'
+  - Here are the [Data input and output](https://docs.aws.amazon.com/transcribe/latest/dg/how-input.html) for Amazon Transcribe
 
 ## Notices
 

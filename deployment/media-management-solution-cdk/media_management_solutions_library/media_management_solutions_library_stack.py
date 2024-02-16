@@ -17,6 +17,12 @@ from media_management_solutions_library.kendra import MediaManagementKendraStack
 from media_management_solutions_library.kms_key import KmsStack
 from media_management_solutions_library.s3buckets import MediaManagementS3BucketsStack
 
+# Current supported formats for each media type.
+# Additional formats can be added here if supported by downstream processes.
+image_suffix = ["jpg", "jpeg", "png"]  # supported formats by Rekognition
+video_suffix = ['mpeg4', 'mp4', 'mov', 'avi']  # supported formats by Rekognition
+audio_suffix = ['amr','flac', 'm4a', 'mp3','mp4','ogg','webm', 'wav']
+
 
 def s3_notification_destination_filter (notification_bucket: s3.IBucket, sns_topic: sns.ITopic, suffix_list: list,
                                         include_uppercase: bool = False):
@@ -148,11 +154,7 @@ class MediaManagementSolutionsLibraryStack(Stack):
         ###########################
         # suffix variables are used to filter S3 bucket notifications by media type.
         # These sames variables are used in defining iam permissions based on media type.
-        image_suffix = ["jpg", "jpeg", "png"]  # supported formats by Rekognition
-        video_suffix = ['mpeg4', 'mp4', 'mov']  # supported formats by Rekognition
-        audio_suffix = ["mp3", "wav", "aac", "flac"]  # add support for m4a for apple memo files?
         transcription_suffix = ["-transcribed.json"]
-
         s3_notification_destination_filter(input_bucket, image_input_topic, image_suffix, include_uppercase=True)
         s3_notification_destination_filter(input_bucket, video_input_topic, video_suffix, include_uppercase=True)
         s3_notification_destination_filter(input_bucket, audio_input_topic, audio_suffix, include_uppercase=True)
