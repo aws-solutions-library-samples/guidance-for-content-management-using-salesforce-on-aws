@@ -94,6 +94,7 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
 <img src="deployment/media-management-solution-cdk/assets/cloudformation-output.png" alt="cf-output" width="700" height="auto">
 
 <img src="deployment/media-management-solution-cdk/assets/cdk-output.png" alt="cdk-output" width="700" height="auto">
+
 ### Deploy Salesforce Lightning Web Component
 1. Have the Saleforce CLI installed. Here are instruction to install: [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
 2. Change directories to the `deployment/sfdc` directory
