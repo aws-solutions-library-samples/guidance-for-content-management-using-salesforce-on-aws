@@ -7,15 +7,15 @@ List the top-level sections of the README template, along with a hyperlink to th
 
 ### Required
 
-1. [Overview](#overview-required)
+1. [Overview](#overview)
     - [Cost](#cost)
-2. [Prerequisites](#prerequisites-required)
-    - [Operating System](#operating-system-required)
-3. [Deployment Steps](#deployment-steps-required)
-4. [Deployment Validation](#deployment-validation-required)
-5. [Running the Guidance](#running-the-guidance-required)
-6. [Next Steps](#next-steps-required)
-7. [Cleanup](#cleanup-required)
+2. [Prerequisites](#prerequisites)
+    - [Operating System](#operating-system)
+3. [Deployment Steps](#deployment-steps)
+4. [Deployment Validation](#deployment-validation)
+5. [Running the Guidance](#running-the-guidance)
+6. [Next Steps](#next-steps)
+7. [Cleanup](#cleanup)
 
 ***Optional***
 
@@ -24,7 +24,7 @@ List the top-level sections of the README template, along with a hyperlink to th
 10. [Notices](#notices-optional)
 11. [Authors](#authors-optional)
 
-## Overview (required)
+## Overview
 
 1. Provide a brief overview explaining the what, why, or how of your Guidance. You can answer any one of the following to help you write this:
 
@@ -45,9 +45,9 @@ _You are responsible for the cost of the AWS services used while running this Gu
 Replace this amount with the approximate cost for running your Guidance in the default Region. This estimate should be per month and for processing/serving resonable number of requests/entities.
 
 
-## Prerequisites (required)
+## Prerequisites
 
-### Operating System (required)
+### Operating System
 These deployment instructions are optimized to best work on a Mac or Linux environment.  Deployment in Windows may require additional steps for setting up required libraries and CLI.
 Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment will have all the requirements installed.
 - Install Python 3.7 or later including pip and virtualenv
@@ -70,22 +70,42 @@ Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment wil
 - Enabling a Region or service etc.
 
 
-### aws cdk bootstrap (if sample code has aws-cdk)
+### Supported Regions
 
-<If using aws-cdk, include steps for account bootstrap for new cdk users.>
+This Guidance is built for regions that support Amazon Kendra. Supported regions are subject to change, so please review [Amazon Kendra endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/kendra.html) for the most up-to-date list.
 
-**Example blurb:** “This Guidance uses aws-cdk. If you are using aws-cdk for first time, please perform the below bootstrapping....”
+## Deployment Steps
+This project consists of two components, which have to be deployed seperately.  One to Salesforce, and one to AWS.
 
-### Supported Regions (if applicable)
+**BEFORE DEPLOYING**
+This requires a certificate that can be used in both Salesforce and AWS.  For _DEV_ purposes, a self-signed cert is the easiest, but must be initiated on the Salesforce side.
 
-<If the Guidance is built for specific AWS Regions, or if the services used in the Guidance do not support all Regions, please specify the Region this Guidance is best suited for>
+### Generate Certificates
+1. **Generate Certificates**: In the target Salesforce org, go to Setup > Certificate and Key Management > Create Self-Signed Certificate.
+    * Here are instructions from Salesforce for creating a self-signed certificate: [Generate a Self-Signed Certificate](https://help.salesforce.com/s/articleView?id=sf.security_keys_creating.htm&type=5).
+    * **Important:** Name that certificate `awsJWTCert`.  The component will only look for a certificate with that name.
+2. Create and download the certificate.
+3. Overwrite ([deployment/media-management-solution-cdk/cert.crt](deployment/media-management-solution-cdk/cert.crt)) with the new certificate you just downloaded.
+### Deploy AWS
+1. The CDK must first be deployed on AWS to create the necessary resources needed for the Salesforce Lightning Web Component (LWC).
+2. Follow the instruction on [Media Management CDK](deployment/media-management-solution-cdk/README.md) to configure and deploy the CDK stack in your AWS Account.
+3. The outputs that will be used in configuring the Salesforce LWC can be found in the CloudFormation outputs tab, or in the CDK CLI after a successful deployment:
 
+<img src="deployment/media-management-solution-cdk/assets/cloudformation-output.png" alt="cf-output" width="700" height="auto">
 
-## Deployment Steps (required)
+<img src="deployment/media-management-solution-cdk/assets/cdk-output.png" alt="cdk-output" width="700" height="auto">
+### Deploy Salesforce Lightning Web Component
+1. Have the Saleforce CLI installed. Here are instruction to install: [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
+2. Change directories to the `deployment/sfdc` directory
+3. If this is your first time using the sf CLI, you must first authorize your org with the CLI. Here is the [Authorization](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth.htm) guide. Use the option that best meets your needs. The option that meets most user's needs is [Authorize an Org Using a Browser](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_web_flow.htm)
 
-1. Clone the repo using command ```git clone https://github.com/aws-solutions-library-samples/guidance-for-content-management-using-salesforce-on-aws.git```
-2. cd to the repo folder ```cd guidance-for-content-management-using-salesforce-on-aws```
-3. Follow the [Deployment Instructions](deployment) to deploy the AWS resources using CDK and the Salesforce Lightning Web Component using the Salesforce CLI.
+4. Run `sf project deploy start`.
+   * Depending on your authorization and configuration, you may need to specify the directory and target org to look like this: `sf project deploy start  --source-dir deployment/sfdc --target-org <org-alias>`
+   * Here is a [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_start_unified)
+5. Add the `AWS S3 Media Files` component to pages as desired.
+6. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
+
+<img src="deployment/media-management-solution-cdk/assets/lightning-app-builder.png" alt="lwc" width="600" height="auto">
 
 ## Deployment Validation  (required)
 
@@ -100,7 +120,7 @@ Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment wil
 
 
 
-## Running the Guidance (required)
+## Running the Guidance
 
 <Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.> 
 
@@ -113,20 +133,31 @@ This section should include:
 
 
 
-## Next Steps (required)
+## Next Steps
 
-Provide suggestions and recommendations about how customers can modify the parameters and the components of the Guidance to further enhance it according to their requirements.
+This Guidance provides the foundations for
 
-
-## Cleanup (required)
-
-- Include detailed instructions, commands, and console actions to delete the deployed Guidance.
-- If the Guidance requires manual deletion of resources, such as the content of an S3 bucket, please specify.
-- ECR will be retained
-- S3 will be retained
-- EC2 image builder Container recipes will be retained
-- EC2 image builder Infrastructure configurations
-
+## Cleanup
+### Delete Stack
+To clean up environment, AWS resources can be deleted using the CDK or CloudFormation. With CDK, run the `cdk destroy` command to delete the resources. With CloudFormation, you can go to the CloudFormation stack and click `Delete`
+### Manually delete retained resources
+After deleting the stack, there will be some resources that will be retained. You will need to manually delete these resources.
+- Amazon S3 buckets will be retained:
+  - `InputBucket`
+  - `OutputBucket`
+  - `TranscriptionBucket`
+  - `LoggingBucket`
+- Amazon Elastic Container Registry (ECR) will be retained:
+  - `json2word_repo`
+  - `exif_tool_repo`
+  - `encoder_repo`
+- In the EC2 Image Builder service, 3 container recipes and 1 infrastructure configurations will be retained.
+  - Container recipes:
+    - `json2word_recipe`
+    - `exif_tool_recipe`
+    - `encoder_recipe`
+  - Infrastructure configurations:
+    - `InfrastructureConfigurationContainerStack`
 
 ## FAQ, known issues, additional considerations, and limitations (optional)
 
