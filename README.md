@@ -3,26 +3,21 @@
 <img src="assets/images/reference_architecture.png" alt="reference_architecture" width="800" height="auto">
 
 
-## Table of Content (required)
-
-List the top-level sections of the README template, along with a hyperlink to the specific section.
-
-### Required
-
+## Table of Content
 1. [Overview](#overview)
     - [Cost](#cost)
 2. [Prerequisites](#prerequisites)
     - [Operating System](#operating-system)
 3. [Deployment Steps](#deployment-steps)
     - [Deploy AWS](#deploy-aws)
-   - [Deploy Salesforce Lightning Web Component](#deploy-salesforce-lightning-web-component)
+    - [Deploy Salesforce Lightning Web Component](#deploy-salesforce-lightning-web-component)
 4. [Deployment Validation](#deployment-validation)
 5. [Running the Guidance](#running-the-guidance)
+    - [Supported Media Files](#supported-media-files)
 6. [Next Steps](#next-steps)
 7. [Cleanup](#cleanup)
-8. [Supported Media Files](#supported-media-files)
-10. [Notices](#notices)
-11. [Authors](#authors)
+8. [Notices](#notices)
+9. [Authors](#authors)
 
 ## Overview
 
@@ -54,7 +49,7 @@ Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment wil
 
 ### Supported Regions
 
-This Guidance is built for regions that support Amazon Kendra. Supported regions are subject to change, so please review [Amazon Kendra endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/kendra.html) for the most up-to-date list.
+This Guidance is built for regions that support Amazon Kendra. Supported regions are subject to change, so please review [Amazon Kendra endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/kendra.html) for the most up-to-date list. Attempting to deploy the CDK stack in a region where Amazon Kendra in unavailable will fail.
 
 ## Deployment Steps
 This project consists of two components, which have to be deployed seperately.  One to Salesforce, and one to AWS.
@@ -111,6 +106,7 @@ Here is a sample output of the Document generated.
 
 ## Running the Guidance
 
+When running this solution, each case will generate a new prefix in the input S3 Bucket to keep inputs seperated from each other.
 <Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.> 
 
 This section should include:
@@ -119,12 +115,20 @@ This section should include:
 * Commands to run
 * Expected output (provide screenshot if possible)
 * Output description
+### Supported Media Files
 
+Because of the format compatibility of Amazon Transcribe and Amazon Rekognition, only the following file formats are supported. Any formats not present here, will still be stored in S3, but will not be processed by its respective pipeline.
+- Image File Formats: "jpg", "jpeg", "png"
+  - Here are the [Image specifications](https://docs.aws.amazon.com/rekognition/latest/dg/images-information.html) for Amazon Rekognition
+- Video File Formats: 'mpeg4', 'mp4', 'mov', 'avi'
+  - Here are the [Video specifications](https://docs.aws.amazon.com/rekognition/latest/dg/video.html) for Amazon Rekognition
+- Audio File Formats: 'amr', 'flac', 'm4a', 'mp3', 'mp4', 'ogg', 'webm', 'wav'
+  - Here are the [Data input and output](https://docs.aws.amazon.com/transcribe/latest/dg/how-input.html) for Amazon Transcribe
 
 
 ## Next Steps
 
-This Guidance provides the foundations for
+This Guidance establishes the basis for securely storing and processing media files using AI/ML by connecting AWS and Salesforce. Customers can improve this by incorporating additional data processing or personalized AI/ML models, resulting in a more tailored solution for their specific needs. Customers have the option to include extra audio transcript processing for summary generation via [Amazon Bedrock](https://aws.amazon.com/bedrock/) for GenAI.
 
 ## Cleanup
 ### Delete Stack
@@ -148,20 +152,12 @@ After deleting the stack, there will be some resources that will be retained. Yo
   - Infrastructure configurations:
     - `InfrastructureConfigurationContainerStack`
 
-## Supported Media Files
 
-Because of the format compatibility of Amazon Transcribe and Amazon Rekognition, only the following file formats are supported. Any formats not present here, will still be stored in S3, but will not be processed by its respective pipeline.
-- Image File Formats: "jpg", "jpeg", "png"
-  - Here are the [Image specifications](https://docs.aws.amazon.com/rekognition/latest/dg/images-information.html) for Amazon Rekognition
-- Video File Formats: 'mpeg4', 'mp4', 'mov', 'avi'
-  - Here are the [Video specifications](https://docs.aws.amazon.com/rekognition/latest/dg/video.html) for Amazon Rekognition
-- Audio File Formats: 'amr', 'flac', 'm4a', 'mp3', 'mp4', 'ogg', 'webm', 'wav'
-  - Here are the [Data input and output](https://docs.aws.amazon.com/transcribe/latest/dg/how-input.html) for Amazon Transcribe
 
 ## Notices
 
 **External Library Notice:**
-*An external FFmpeg binary will be pulled from [https://www.johnvansickle.com](https://www.johnvansickle.com) for the [Encoder Dockerfile](deployment/media-management-solution-cdk/media_management_solutions_library/container_assets/EncoderRecipe/Dockerfile) container. It is the responsibility of the customer to abide by the licensing of FFmpeg.*
+*An external FFmpeg binary will be pulled from [https://www.johnvansickle.com](https://www.johnvansickle.com) for the [Encoder Dockerfile](deployment/media-management-solution-cdk/media_management_solutions_library/container_assets/EncoderRecipe/) container. It is the responsibility of the customer to abide by the licensing of FFmpeg.*
 
 **Legal Disclaimer:**
 *Customers are responsible for making their own independent assessment of the information in this Guidance. This Guidance: (a) is for informational purposes only, (b) represents AWS current product offerings and practices, which are subject to change without notice, and (c) does not create any commitments or assurances from AWS and its affiliates, suppliers or licensors. AWS products or services are provided “as is” without warranties, representations, or conditions of any kind, whether express or implied. AWS responsibilities and liabilities to its customers are controlled by AWS agreements, and this Guidance is not part of, nor does it modify, any agreement between AWS and its customers.*
