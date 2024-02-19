@@ -7,7 +7,6 @@
 1. [Overview](#overview)
     - [Cost](#cost)
 2. [Prerequisites](#prerequisites)
-    - [Operating System](#operating-system)
 3. [Deployment Steps](#deployment-steps)
     - [Deploy AWS](#deploy-aws)
     - [Deploy Salesforce Lightning Web Component](#deploy-salesforce-lightning-web-component)
@@ -22,7 +21,7 @@
 ## Overview
 
 
-In this guidance, c
+In this guidance, ...
 
 
 1. Provide a brief overview explaining the what, why, or how of your Guidance. You can answer any one of the following to help you write this:
@@ -40,19 +39,22 @@ You are responsible for the cost of the AWS services used while running this Gui
 ## Prerequisites
 
 ### Operating System
-These deployment instructions are optimized to best work on a Mac or Linux environment.  Deployment in Windows may require additional steps for setting up required libraries and CLI.
-Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment will have all the requirements installed.
+These deployment instructions are optimized to best work on a Mac or Linux environment. Deployment in Windows may require additional steps for setting up required libraries and CLI.
+Using a standard [AWS Cloud9](https://aws.amazon.com/pm/cloud9/) environment will have all the AWS requirements installed.
+
+### Software Requirements
 - Install Python 3.7 or later including pip and virtualenv
 - Install Node.js 14.15.0 or later
 - Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Install [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
+- Install [Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
 
 ### Supported Regions
 
 This Guidance is built for regions that support Amazon Kendra. Supported regions are subject to change, so please review [Amazon Kendra endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/kendra.html) for the most up-to-date list. Attempting to deploy the CDK stack in a region where Amazon Kendra in unavailable will fail.
 
 ## Deployment Steps
-This project consists of two components, which have to be deployed seperately.  One to Salesforce, and one to AWS.
+This project consists of two components, which have to be deployed separately.  One to Salesforce, and one to AWS.
 
 **BEFORE DEPLOYING**
 This requires a certificate that can be used in both Salesforce and AWS.  For _DEV_ purposes, a self-signed cert is the easiest, but must be initiated on the Salesforce side.
@@ -73,22 +75,35 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
 <img src="assets/images/cdk-output.png" alt="cdk-output" width="700" height="auto">
 
 ### Deploy Salesforce Lightning Web Component
-1. Have the Saleforce CLI installed. Here are instruction to install: [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
+1. Have the Salesforce CLI installed. Here are instruction to install: [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm)
 2. Change directories to the `deployment/sfdc` directory
-3. If this is your first time using the sf CLI, you must first authorize your org with the CLI. Here is the [Authorization](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth.htm) guide. Use the option that best meets your needs. The option that meets most user's needs is [Authorize an Org Using a Browser](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_web_flow.htm)
+3. If this is your first time using the Salesforce CLI, you must first authorize your org with the CLI. Here is the [Authorization](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth.htm) guide. Use the option that best meets your needs. The option that meets most user's needs is [Authorize an Org Using a Browser](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_web_flow.htm)
 
 4. Run `sf project deploy start`.
-   * Depending on your authorization and configuration, you may need to specify the directory and target org to look like this: `sf project deploy start  --source-dir deployment/sfdc --target-org <org-alias>`
+   * Depending on your authorization and configuration, you may need to specify the directory and target org with additional tags. Here is an example of how this might look like: `sf project deploy start  --source-dir deployment/sfdc --target-org <org-alias>`
    * Here is a [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference_project_commands_unified.htm#cli_reference_project_deploy_start_unified)
-5. Add the `AWS S3 Media Files` component to pages as desired.
-6. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
-<img src="assets/images/lightning-app-builder.png" alt="lightning-app-builder" width="600" height="auto">
-
-
 
 ## Deployment Validation
 
-To validate the deployment, you will need to upload some media files to a case. In this example, you can see that a JPG image and MOV video file were successfully uploaded.
+Now that the Salesforce LWC and AWS CDK are deployed, you will need to add the LWC to your Case Page Layout, and insert the values of the S3 buckets, API Gateway, and Kendra ID. We are going to use the [Lightning App Builder](https://help.salesforce.com/s/articleView?id=sf.lightning_app_builder_overview.htm&type=5) to configure the Case Page and add the custom LWC to Cases.
+1. Follow this guide,[Create and Configure Lightning Experience Record Pages](https://help.salesforce.com/s/articleView?id=sf.lightning_app_builder_customize_lex_pages.htm&type=5), and use your preferred method of creating a Lightning App Builder for the Cases page.
+2. In the Lightning App Builder page for the Cases, add the `AWS S3 Media Files` component to pages as desired.
+3. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
+<img src="assets/images/lightning-app-builder.png" alt="lightning-app-builder" width="600" height="auto">
+
+4. Open up a sample case, and hit Refresh on the *AWS Files* Component. If you do not get any errors, the LWC was configured correctly.
+5. Next step is to upload media files.
+
+### Common Misconfigurations
+- The most common reason why you would get an error is because of the self-signed certificate. Here are some things to check:
+  - Review the [generate certificates](#generate-certificates) section and make sure that you have followed all the steps.
+    - Make sure that the certificate is named `awsJWTCert`
+
+## Running the Guidance
+
+When running this solution, each case will generate a new prefix in the input S3 Bucket to keep inputs seperated from each other.
+
+In this example, you can see that a JPG image and MOV video file were successfully uploaded.
 
 <img src="assets/images/case_dashboard.png" alt="case_dashboard" width="700" height="auto">
 
@@ -104,10 +119,8 @@ Here is a sample output of the Document generated.
 
 <img src="assets/images/transcription_docx.png" alt="transcription_docx" width="600" height="auto">
 
-## Running the Guidance
 
-When running this solution, each case will generate a new prefix in the input S3 Bucket to keep inputs seperated from each other.
-<Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.> 
+<Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.>
 
 This section should include:
 
@@ -120,9 +133,9 @@ This section should include:
 Because of the format compatibility of Amazon Transcribe and Amazon Rekognition, only the following file formats are supported. Any formats not present here, will still be stored in S3, but will not be processed by its respective pipeline.
 - Image File Formats: "jpg", "jpeg", "png"
   - Here are the [Image specifications](https://docs.aws.amazon.com/rekognition/latest/dg/images-information.html) for Amazon Rekognition
-- Video File Formats: 'mpeg4', 'mp4', 'mov', 'avi'
+- Video File Formats: "mpeg4", "mp4", "mov", "avi"
   - Here are the [Video specifications](https://docs.aws.amazon.com/rekognition/latest/dg/video.html) for Amazon Rekognition
-- Audio File Formats: 'amr', 'flac', 'm4a', 'mp3', 'mp4', 'ogg', 'webm', 'wav'
+- Audio File Formats: "amr", "flac", "m4a", "mp3", "mp4", "ogg", "webm", "wav"
   - Here are the [Data input and output](https://docs.aws.amazon.com/transcribe/latest/dg/how-input.html) for Amazon Transcribe
 
 
@@ -165,8 +178,8 @@ After deleting the stack, there will be some resources that will be retained. Yo
 
 ## Authors
 
-John Meyer - Salesforce Solutions Engineer (Retired)
-Kyle Hart - AWS Principal Solutions Architect
-Christian Ramirez - AWS Partner Solutions Architect
-Kishore Dhamodaran - AWS Senior Solutions Architect
-Jared Wiener - AWS Senior Solutions Architect
+- John Meyer - Salesforce Solutions Engineer (Retired)
+- Kyle Hart - AWS Principal Solutions Architect
+- Christian Ramirez - AWS Partner Solutions Architect
+- Jared Wiener - AWS Senior Solutions Architect
+- Kishore Dhamodaran - AWS Senior Solutions Architect
