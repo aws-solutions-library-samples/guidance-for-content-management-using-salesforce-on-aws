@@ -1,4 +1,5 @@
 .idea/
+.sfdx/
 /deployment/media-management-solution-cdk/media-management-solution-cdk/SampleMediaFiles/
 /.venv/
 /deployment/media-management-solution-cdk/.venv/
