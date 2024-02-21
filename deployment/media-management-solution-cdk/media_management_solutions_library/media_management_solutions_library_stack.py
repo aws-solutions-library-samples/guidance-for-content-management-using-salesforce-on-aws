@@ -21,7 +21,7 @@ from media_management_solutions_library.s3buckets import MediaManagementS3Bucket
 # Additional formats can be added here if supported by downstream processes.
 image_suffix = ["jpg", "jpeg", "png"]  # supported formats by Rekognition
 video_suffix = ['mpeg4', 'mp4', 'mov', 'avi']  # supported formats by Rekognition
-audio_suffix = ['amr','flac', 'm4a', 'mp3','mp4','ogg','webm', 'wav']
+audio_suffix = ['amr','flac', 'm4a', 'mp3','ogg','webm', 'wav']
 
 
 def s3_notification_destination_filter (notification_bucket: s3.IBucket, sns_topic: sns.ITopic, suffix_list: list,

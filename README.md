@@ -89,7 +89,7 @@ Now that the Salesforce LWC and AWS CDK are deployed, you will need to add the L
 1. Follow this guide,[Create and Configure Lightning Experience Record Pages](https://help.salesforce.com/s/articleView?id=sf.lightning_app_builder_customize_lex_pages.htm&type=5), and use your preferred method of creating a Lightning App Builder for the Cases page.
 2. In the Lightning App Builder page for the Cases, add the `AWS S3 Media Files` component to pages as desired.
 3. Use the outputs from the CDK Deployment for the required inputs of the `AWS S3 Media Files` component:
-<img src="assets/images/lightning-app-builder.png" alt="lightning-app-builder" width="600" height="auto">
+<img src="assets/images/lightning-app-builder.png" alt="lightning-app-builder" width="auto" height="auto">
 
 4. Open up a sample case, and hit Refresh on the *AWS Files* Component. If you do not get any errors, the LWC was configured correctly.
 5. Next step is to upload media files.
