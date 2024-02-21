@@ -36,20 +36,12 @@ class MediaManagementAuthStack(Construct):
 
         iam_role = iam.Role(self, "EndUserRole", assumed_by=iam.ArnPrincipal(handler.role.role_arn))
         iam_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonKendraFullAccess"))
-        input_bucket.grant_write(iam_role)
+        input_bucket.grant_read_write(iam_role)
+        input_bucket.grant_delete(iam_role)
         output_bucket.grant_read(iam_role)
+        output_bucket.grant_delete(iam_role)
         transcription_bucket.grant_read(iam_role)
-
-        #
-        # iam_role.add_to_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW, actions=["s3:*"], resources=[
-        #     input_bucket.bucket_arn,
-        #     input_bucket.bucket_arn + '/*',
-        #     output_bucket.bucket_arn,
-        #     output_bucket.bucket_arn + '/*',
-        #     transcription_bucket.bucket_arn,
-        #     transcription_bucket.bucket_arn + '/*'
-        # ]))
-        # iam_role.add_to_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW, actions=["kms:*"], resources=["*"]))
+        transcription_bucket.grant_delete(iam_role)
 
         handler.add_environment('ROLE_ARN', iam_role.role_arn)
 
