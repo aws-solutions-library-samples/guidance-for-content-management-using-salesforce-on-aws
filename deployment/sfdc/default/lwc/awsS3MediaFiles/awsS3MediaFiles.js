@@ -533,7 +533,33 @@ export default class AwsS3MediaFiles extends LightningElement {
 							return array.indexOf(value) === index;
 						  }
 
-						const resultKeys = data.ResultItems.map(result => `${that.awsBucketPrefix}${result.DocumentTitle.Text}`).filter(unique);
+						
+						const resultKeys = data.ResultItems.map(result => {
+							const fileComponents = result.DocumentId.split('/'); 
+							const fileName = fileComponents[fileComponents.length-1].replace(REDACTED_TRANSCRIPTION_FILE_PREFIX, REDACTED_MEDIA_FILE_PREFIX);
+
+							if (fileName.endsWith('.docx')) {
+								return `${that.awsBucketPrefix}${fileName.substring(0,fileName.length - ".docx".length)}`;
+							}
+							else if (fileName.endsWith(TRANSCRIPTION_SUFFIX)) {
+								return `${that.awsBucketPrefix}${fileName.substring(0,fileName.length - TRANSCRIPTION_SUFFIX.length)}`;
+							}
+							else if (fileName.endsWith(IMAGE_METADATA_SUFFIX)) {
+								return `${that.awsBucketPrefix}${fileName.substring(0,fileName.length - IMAGE_METADATA_SUFFIX.length)}`;
+							}
+							else if (fileName.endsWith(IMAGE_RECOGNITION_SUFFIX)) {
+								return `${that.awsBucketPrefix}${fileName.substring(0,fileName.length - IMAGE_RECOGNITION_SUFFIX.length)}`;
+							}
+							else if (fileName.endsWith(VIDEO_RECOGNITION_SUFFIX)) {
+								return `${that.awsBucketPrefix}${fileName.substring(0,fileName.length - VIDEO_RECOGNITION_SUFFIX.length)}`;
+
+							}
+							else {
+								return `${that.awsBucketPrefix}${fileName}`
+							}
+						}).filter(unique);
+
+						console.log(JSON.stringify({resultKeys}))
 
 						Promise.all(resultKeys.map(async key => {
 							let fileName = key.substring(that.awsBucketPrefix.length);
@@ -555,8 +581,10 @@ export default class AwsS3MediaFiles extends LightningElement {
 								fileName = fileName.substring(0, fileName.indexOf(VIDEO_RECOGNITION_SUFFIX));
 							}
 
+							const isRedacted = fileName.startsWith(REDACTED_MEDIA_FILE_PREFIX);
+
 							const file = await that.s3.getObjectAttributes({
-								Bucket: that.awsInputBucketName,
+								Bucket: isRedacted?that.awsOutputBucketName:that.awsInputBucketName,
 								Key: `${that.awsBucketPrefix}${fileName}`,
 								ObjectAttributes: ['ObjectSize']
 							}).promise().catch(e => console.error(e.message));
@@ -567,10 +595,10 @@ export default class AwsS3MediaFiles extends LightningElement {
 
 							return {
 								selected: false,
-								name: fileName,
-								fileIsRedacted: fileName.includes(REDACTED_MEDIA_FILE_PREFIX),
+								name: fileName.replace(REDACTED_MEDIA_FILE_PREFIX, ''),
+								fileIsRedacted: isRedacted,
 								fileDisplayName: fileName.replace(REDACTED_MEDIA_FILE_PREFIX, ''),
-								key: `${that.awsBucketPrefix}${fileName}`,
+								key: isRedacted?`${that.awsBucketPrefix}${REDACTED_MEDIA_FILE_PREFIX}${fileName}`:`${that.awsBucketPrefix}${fileName}`,
 								fileIsViewable: audioFile || videoFile || imageFile,
 								audioFile: audioFile,
 								videoFile: videoFile,
@@ -584,7 +612,7 @@ export default class AwsS3MediaFiles extends LightningElement {
 									: null,
 								icon: getIconName(fileName),
 								link: that.s3.getSignedUrl('getObject', {
-									Bucket: that.awsInputBucketName,
+									Bucket: isRedacted?that.awsOutputBucketName:that.awsInputBucketName,
 									Key: `${that.awsBucketPrefix}${fileName}`,
 									Expires: LINK_EXPIRATION_SECS
 								}),
@@ -615,7 +643,6 @@ export default class AwsS3MediaFiles extends LightningElement {
 		let transcriptionFileName, transcriptionWordDocument;
 
 		if (file.fileIsRedacted) {
-			console.log('REDACTED')
 			transcriptionFileName=`${REDACTED_TRANSCRIPTION_FILE_PREFIX}${file.name}${TRANSCRIPTION_SUFFIX}`;
 			transcriptionWordDocument=`${REDACTED_TRANSCRIPTION_FILE_PREFIX}${file.name}.docx`;
 		}
