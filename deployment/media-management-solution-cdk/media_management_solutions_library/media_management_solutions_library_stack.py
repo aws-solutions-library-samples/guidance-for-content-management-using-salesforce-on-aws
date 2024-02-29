@@ -122,6 +122,12 @@ class MediaManagementSolutionsLibraryStack(Stack):
                                         master_key=master_key,
                                         topic_name="TranscriptionTopic_{}".format(defaultnaming[0]))
 
+        metadata_topic = sns.Topic(self, "MetadataTopic",
+                                   display_name="MetadataTopic_{}".format(defaultnaming[0]),
+                                   master_key=master_key,
+                                   topic_name="MetadataTopic_{}".format(defaultnaming[0]))
+
+
         #########################
         # IAM Policy for sns to publish to Rekognition
         #########################
@@ -155,10 +161,13 @@ class MediaManagementSolutionsLibraryStack(Stack):
         # suffix variables are used to filter S3 bucket notifications by media type.
         # These sames variables are used in defining iam permissions based on media type.
         transcription_suffix = ["-transcribed.json"]
+        doc_suffix = [".docx"]
+
         s3_notification_destination_filter(input_bucket, image_input_topic, image_suffix, include_uppercase=True)
         s3_notification_destination_filter(input_bucket, video_input_topic, video_suffix, include_uppercase=True)
         s3_notification_destination_filter(input_bucket, audio_input_topic, audio_suffix, include_uppercase=True)
         s3_notification_destination_filter(transcription_bucket, transcription_topic, transcription_suffix)
+        s3_notification_destination_filter(output_bucket, metadata_topic, doc_suffix)
 
         ##########
         # lambda #
@@ -228,6 +237,22 @@ class MediaManagementSolutionsLibraryStack(Stack):
                                                          handler="index.lambda_handler",
                                                          runtime=lambda_.Runtime.PYTHON_3_11)
 
+        lambda_function_add_metadata = lambda_.Function(self, id='add_metadata_function',
+                                                        function_name='add-metadata-{}'.format(
+                                                             defaultnaming[0]),
+                                                        code=lambda_.Code.from_asset(
+                                                             path.join(os.getcwd(),
+                                                                       "media_management_solutions_library",
+                                                                       "lambda_assets",
+                                                                       "add_metadata_function"))
+                                                        ,
+                                                        environment={
+                                                             "TRANSCRIPTION_BUCKET": transcription_bucket.bucket_name},
+                                                        memory_size=1024,
+                                                        timeout=Duration.seconds(300),
+                                                        handler="index.lambda_handler",
+                                                        runtime=lambda_.Runtime.PYTHON_3_11)
+
         ##############################
         # Lambda Permissions #
         ##############################
@@ -242,7 +267,9 @@ class MediaManagementSolutionsLibraryStack(Stack):
         output_bucket.grant_put(lambda_function_exif_tool)
         output_bucket.grant_put(lambda_function_encoder)
         output_bucket.grant_put(lambda_function_generate_docx)
+        output_bucket.grant_put(lambda_function_add_metadata)
         transcription_bucket.grant_put(lambda_function_transcription)
+        transcription_bucket.grant_put(lambda_function_add_metadata)
         transcription_bucket.grant_read(lambda_function_generate_docx)
         transcription_bucket.grant_read(lambda_function_encoder)
 
@@ -278,8 +305,10 @@ class MediaManagementSolutionsLibraryStack(Stack):
         audio_input_topic.add_subscription(subscriptions.LambdaSubscription(lambda_function_transcription))
         transcription_topic.add_subscription(subscriptions.LambdaSubscription(lambda_function_generate_docx))
         transcription_topic.add_subscription(subscriptions.LambdaSubscription(lambda_function_encoder))
+        transcription_topic.add_subscription(subscriptions.LambdaSubscription(lambda_function_add_metadata))
+        metadata_topic.add_subscription(subscriptions.LambdaSubscription(lambda_function_add_metadata))
 
-        #####################
+    #####################
         # Video Rekognition #
         #####################
         if self.deploy_video_rekognition:
