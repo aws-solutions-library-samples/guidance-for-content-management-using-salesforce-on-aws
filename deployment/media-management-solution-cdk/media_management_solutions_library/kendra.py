@@ -18,14 +18,24 @@ class MediaManagementKendraStack(Construct):
         self.kendra_index_name = kendra_index_name
         kendra_index_role = iam.Role(self, f'KendraIndexRole{self.construct_id}',
                                      assumed_by=iam.ServicePrincipal('kendra.amazonaws.com'))
-        # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_kendra/CfnDataSource.html
 
-        # https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_kendra/CfnIndex.html
+        document_metadata_configuration_property = kendra.CfnIndex.DocumentMetadataConfigurationProperty(
+            name="object_id",
+            type="STRING_VALUE",
+            search=kendra.CfnIndex.SearchProperty(
+                displayable=False,
+                facetable=True,
+                searchable=False,
+                sortable=False
+            )
+        )
 
         self.kendra_index = kendra.CfnIndex(self, f"KendraIndex{self.construct_id}",
                                             edition=self.index_edition,
                                             name=self.kendra_index_name,
-                                            role_arn=kendra_index_role.role_arn)
+                                            role_arn=kendra_index_role.role_arn,
+                                            document_metadata_configurations=[document_metadata_configuration_property])
+
         index_policy = iam.Policy(self, f"KendraIndexPolicy{self.construct_id}",
                                   statements=[
                                       iam.PolicyStatement(
@@ -82,13 +92,13 @@ class MediaManagementKendraStack(Construct):
             type="S3", schedule='cron(0 0/1 * * ? *)',
             data_source_configuration=data_source_configuration_property)
         data_source = kendra.CfnDataSource(self, f"{data_source_name}{self.construct_id}DataSource",
-                                                  index_id=data_source_props.index_id,
-                                                  name=data_source_props.name,
-                                                  type=data_source_props.type,
-                                                  role_arn=kendra_datasource_role.role_arn,
-                                                  data_source_configuration=data_source_props.data_source_configuration,
-                                                  schedule=data_source_props.schedule
-                                                  )
+                                           index_id=data_source_props.index_id,
+                                           name=data_source_props.name,
+                                           type=data_source_props.type,
+                                           role_arn=kendra_datasource_role.role_arn,
+                                           data_source_configuration=data_source_props.data_source_configuration,
+                                           schedule=data_source_props.schedule
+                                           )
         kendra_datasource_role.add_to_policy(iam.PolicyStatement(effect=iam.Effect.ALLOW,
                                                                  actions=['kendra:BatchPutDocument',
                                                                           'kendra:BatchDeleteDocument'],
