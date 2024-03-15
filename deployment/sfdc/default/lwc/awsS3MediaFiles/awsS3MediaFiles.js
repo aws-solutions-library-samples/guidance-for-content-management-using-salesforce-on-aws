@@ -520,7 +520,15 @@ export default class AwsS3MediaFiles extends LightningElement {
 			try { 
 				this.kendra.query({
 					IndexId: this.awsKendraIndex,
-					QueryText: event.target.value
+					QueryText: event.target.value,
+					AttributeFilter: {
+						'EqualsTo': {
+							'Key': 'object_id',
+							'Value': {
+								'StringValue': this.recordId
+							}
+						},
+					}
 				}, function(err, data) {
 					if (err) {
 						console.error(err.message);
