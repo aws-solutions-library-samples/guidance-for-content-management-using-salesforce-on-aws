@@ -17,5 +17,6 @@ deployment_stack = MediaManagementSolutionsLibraryStack(app, "sfdc-media-solutio
                                                         deploy_kendra=True,  # Bool value to determine if kendra will be deployed
                                                         kendra_index_edition="DEVELOPER_EDITION",  # accepted values are: DEVELOPER_EDITION or ENTERPRISE_EDITION
                                                         pub_cert=cert,  # string value of public cert.
-                                                        deploy_video_rekognition=False)  # Bool value to determine if video rekognition will be deployed
+                                                        deploy_video_rekognition=False,# Bool value to determine if video rekognition will be deployed
+                                                        description="Infrastructure for Content Management Solution (SO9418)")
 app.synth()
