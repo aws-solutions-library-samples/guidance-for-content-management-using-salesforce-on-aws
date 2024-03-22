@@ -3,7 +3,6 @@
 
 ## Set up CDK
 You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`media_management_solutions_library_stack`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -50,17 +49,18 @@ cdk synth
 ```
 
 ## Change default parameters
-The CDK Stack will have default values set in the [app.py](app.py) file. Here are the parameters that you can change: 
-- `enable_s3_kms_encryption` Is a boolean value. When `True`, it will use the KMS master key to encrypt S3. If False, Se will be encrypted with SSE-S3 default encryption.
-- `deploy_kendra` Is a boolean value. When `True`, Amazon Kendra will be deployed along with connections to Transcription and Output Bucket datasource.
-- `kendra_index_edition` Accepted values are: `DEVELOPER_EDITION` (default) or `ENTERPRISE_EDITION`
-- `deploy_video_rekognition` Is a boolean value. When `True`, an optional Video Rekognition stack will be deployed. Currently, the Salesforce LWC will not be able to render the results of Video Rekognition on the Salesforce Console.
-- `pub_cert` this is the string value of the self-signed cert generated in Salesforce. If you overwrite [cert.crt](cert.crt) with the self-signed cert created in Salesforce, there is nothing to change here.
+You can modify parameters in [app.py](app.py):
+- `enable_s3_kms_encryption`: Encrypt S3 with KMS (`True`) or SSE-S3 (`False`)
+- `deploy_kendra`: Deploy Amazon Kendra (`True`/`False`)
+- `kendra_index_edition`: `DEVELOPER_EDITION` (default) or `ENTERPRISE_EDITION`
+- `deploy_video_rekognition`: Deploy Video Rekognition stack (`True`/`False`)
+- `pub_cert`: Self-signed cert string from Salesforce
 
 ### Deployment Notes
-- Changing the `deploy_kendra` to `False` will help reduce cost for evaluating the solution for your use case. The "Search for case files" functionality in the Salesforce Lightning Web Component (LWC) will not work and not provide any results, but the search bar will still be present.
-- setting the `enable_s3_kms_encryption` value to `True` will require additional management of the KMS key. Any user or service roles that reads from the S3 buckets will also need to have encrypt and decrypt permissions for the KMS key used in S3.
-- `deploy_video_rekognition` has a default value of `False`. The LWC does not currently have any functionality with the output of this process. This value can be changed after the initial deployment if you wish to process the video files with Amazon Rekognition.
+- Changing the `deploy_kendra` to `False` will help reduce cost for evaluating the solution for your use case. This is not a blocker for deployment, and can be changed at a later time.
+- Setting the `enable_s3_kms_encryption` value to `True` will require additional management of the KMS key. Any user or service roles that reads from the S3 buckets will also need to have encrypted and decrypt permissions for the KMS key used in S3.
+- The Salesforce LWC does not currently have any functionality with the output of video rekognition. This is why `deploy_video_rekognition` has a default value of `False`.  This value can be changed after the initial deployment if you wish to process the video files with Amazon Rekognition.
+- For `pub_cert`, if you overwrite [cert.crt](cert.crt) with the self-signed cert created in Salesforce, there is nothing to change here.
 
 ## Deploy this CloudFormation template.
 

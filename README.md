@@ -53,7 +53,10 @@ This requires a certificate that can be used in both Salesforce and AWS.  For _D
     * Here are instructions from Salesforce for creating a self-signed certificate: [Generate a Self-Signed Certificate](https://help.salesforce.com/s/articleView?id=sf.security_keys_creating.htm&type=5).
     * **Important:** Name that certificate `awsJWTCert`.  The component will only look for a certificate with that name.
 2. Create and download the certificate.
-3. Overwrite ([deployment/media-management-solution-cdk/cert.crt](deployment/media-management-solution-cdk/cert.crt)) with the new certificate you just downloaded.
+3. There are 2 options for providing the public certificate to your AWS infrastructure:
+   1. Overwrite [deployment/media-management-solution-cdk/cert.crt](deployment/media-management-solution-cdk/cert.crt) with the new certificate you just downloaded.
+   2. In [app.py](deployment/media-management-solution-cdk/app.py), the path to the public certificate file is stored in the `pub_cert_path` variable. If you want to use a different file or location for the public certificate, you need to modify the value of the `pub_cert_path` variable with the path to your cert for the CDK to read in the values.
+
 ### Deploy AWS
 1. The CDK must first be deployed on AWS to create the necessary resources needed for the Salesforce Lightning Web Component (LWC).
 2. Follow the instruction on [Media Management CDK](deployment/media-management-solution-cdk/README.md) to configure and deploy the CDK stack in your AWS Account.

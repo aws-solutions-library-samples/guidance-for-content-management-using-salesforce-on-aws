@@ -7,7 +7,8 @@ import aws_cdk as cdk
 from media_management_solutions_library.media_management_solutions_library_stack import \
     MediaManagementSolutionsLibraryStack
 
-with open(path.join(getcwd(), "cert.crt"), "r") as f:
+pub_cert_path=path.join(getcwd(), "cert.crt") # path to where the public cert is stored. input must be a string.
+with open(pub_cert_path, "r") as f:
     cert = f.read()
 
 app = cdk.App()
