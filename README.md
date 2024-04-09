@@ -111,15 +111,6 @@ Here is a sample output of the Document generated.
 
 <img src="assets/images/transcription_docx.png" alt="transcription_docx" width="600" height="auto">
 
-
-<Provide instructions to run the Guidance with the sample data or input provided, and interpret the output received.>
-
-This section should include:
-
-* Guidance inputs
-* Commands to run
-* Expected output (provide screenshot if possible)
-* Output description
 ### Supported Media Files
 
 Because of the format compatibility of Amazon Transcribe and Amazon Rekognition, only the following file formats are supported. Any formats not present here, will still be stored in S3, but will not be processed by its respective pipeline.
@@ -170,10 +161,14 @@ After deleting the stack, there will be some resources that will be retained. Yo
 *Customers are responsible for making their own independent assessment of the information in this Guidance. This Guidance: (a) is for informational purposes only, (b) represents AWS current product offerings and practices, which are subject to change without notice, and (c) does not create any commitments or assurances from AWS and its affiliates, suppliers or licensors. AWS products or services are provided “as is” without warranties, representations, or conditions of any kind, whether express or implied. AWS responsibilities and liabilities to its customers are controlled by AWS agreements, and this Guidance is not part of, nor does it modify, any agreement between AWS and its customers.*
 
 
-## Authors
+## Authors and Contributors
 
 - John Meyer - Salesforce Solutions Engineer (Retired)
+- John Sautter - Salesforce Senior Director of Solutions Engineering
 - Kyle Hart - AWS Principal Solutions Architect
 - Christian Ramirez - AWS Partner Solutions Architect
 - Jared Wiener - AWS Senior Solutions Architect
 - Kishore Dhamodaran - AWS Senior Solutions Architect
+- Robert Sosinski - AWS Principal Solutions Architect
+- Deepika Suresh - AWS Solutions Architect Technology Solutions
+- Jason Wreath - AWS Head of Solutions for AIML & Data
