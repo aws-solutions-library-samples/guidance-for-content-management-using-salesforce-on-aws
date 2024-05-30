@@ -101,13 +101,14 @@ const getIconName = (fileName) => {
 			return 'doctype:flash';
 		case 'jpg':
 		case 'jpeg':
-		case 'gif':
 		case 'png':
 			return 'doctype:image';
 		case 'mp3':
+		case 'amr':
 		case 'au':
 		case 'wav':
 		case 'flac':
+		case 'ogg':
 		case 'm4a':
 			return 'doctype:audio';
 		case 'webloc':
@@ -123,9 +124,11 @@ const getIconName = (fileName) => {
 const isAudioFile = (fileName) => {
 	switch (getFileExtension(fileName)) {
 		case 'mp3':
+		case 'amr':
 		case 'au':
 		case 'wav':
 		case 'flac':
+		case 'ogg':
 		case 'm4a':
 			return true;
 		default:
@@ -154,6 +157,7 @@ const isVideoFile = (fileName) => {
 const isImageFile = (fileName) => {
 	switch (getFileExtension(fileName)) {
 		case 'jpeg':
+		case 'png':
 		case 'jpg':
 			return true;
 		default:
