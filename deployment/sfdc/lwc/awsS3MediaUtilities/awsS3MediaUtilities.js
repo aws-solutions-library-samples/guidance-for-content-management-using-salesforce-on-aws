@@ -169,4 +169,4 @@ const isFolder = (fileName) => {
 	return fileName.endsWith('/');
 };
 
-export { humanReadableSize, getIconName, getFileExtension, exif2`dec, isAudioFile, isVideoFile, isImageFile, isFolder };
+export { humanReadableSize, getIconName, getFileExtension, exif2dec, isAudioFile, isVideoFile, isImageFile, isFolder };
